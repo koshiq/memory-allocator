@@ -127,3 +127,24 @@ void *calloc(size_t num, size_t nsize) {
     memset(block, 0, size);
     return block;
 }
+
+void *realloc(void *block, size_t size) 
+{
+    header_t *header;
+    void *ret;
+    
+    if (!block || !size)
+        return malloc(size);
+    
+    header = (header_t*)block - 1;
+    if (header->s.size >= size)
+        return block;
+    
+    ret = malloc(size);
+    if (ret) 
+    {
+        mempy(ret, block, header->s.size);
+        free(block);
+    } 
+    return ret;
+}
